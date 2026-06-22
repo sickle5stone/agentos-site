@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Privacy — agentOS</title>
+<meta name="description" content="How agentOS handles your data: local-first by default, with two clearly-labeled opt-in actions."/>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23523fde'/%3E%3Cpath d='M9 11l5 5-5 5' fill='none' stroke='white' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M17 21h6' stroke='white' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<script>
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          secondary: "#523fde",
+          surface: "#fdf8f7",
+          "surface-container": "#f1edec",
+          "surface-container-lowest": "#ffffff",
+          background: "#fdf8f7",
+          primary: "#000000",
+          "on-background": "#1c1b1b",
+          "on-surface": "#1c1b1b",
+          "on-surface-variant": "#4b463f",
+          "on-secondary": "#ffffff",
+        },
+        spacing: { margin: "40px", "container-max": "1200px" },
+        fontFamily: {
+          "body-md": ["Hanken Grotesk"],
+          "body-lg": ["Hanken Grotesk"],
+          "display-lg": ["Hanken Grotesk"],
+          "headline-md": ["Hanken Grotesk"],
+          "code-md": ["JetBrains Mono"],
+          "label-sm": ["JetBrains Mono"],
+        },
+        fontSize: {
+          "body-md": ["14px", { lineHeight: "20px", fontWeight: "400" }],
+          "body-lg": ["16px", { lineHeight: "26px", fontWeight: "400" }],
+          "display-lg": ["40px", { lineHeight: "48px", letterSpacing: "-0.02em", fontWeight: "600" }],
+          "headline-md": ["22px", { lineHeight: "30px", fontWeight: "600" }],
+          "code-md": ["13px", { lineHeight: "20px", fontWeight: "400" }],
+          "label-sm": ["11px", { lineHeight: "16px", letterSpacing: "0.05em", fontWeight: "500" }],
+        },
+      },
+    },
+  };
+</script>
+<style>
+  .warm-hairline { border: 1px solid rgba(0, 0, 0, 0.08); }
+  .prose-doc h2 { margin-top: 2.5rem; margin-bottom: 0.75rem; padding-top: 2rem; border-top: 1px solid rgba(28,26,23,0.08); }
+  .prose-doc h3 { margin-top: 1.75rem; margin-bottom: 0.5rem; }
+  .prose-doc p { margin-bottom: 1rem; }
+  .prose-doc ul { margin: 0 0 1.25rem 0; padding-left: 0; list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+  .prose-doc li { padding-left: 1.25rem; position: relative; }
+  .prose-doc li::before { content: ""; position: absolute; left: 0; top: 0.65em; width: 5px; height: 5px; border-radius: 9999px; background: #523fde; opacity: 0.55; }
+  .prose-doc code { font-family: "JetBrains Mono", monospace; font-size: 0.88em; background: rgba(244,241,236,0.85); padding: 0.1em 0.35em; border-radius: 0.3em; }
+  .prose-doc a { color: #523fde; text-decoration: none; }
+  .prose-doc a:hover { text-decoration: underline; }
+  .prose-doc strong { font-weight: 600; }
+</style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col font-body-md antialiased">
+
+<nav class="border-b border-black/10 bg-surface/80 backdrop-blur-xl">
+  <div class="max-w-container-max mx-auto px-margin h-20 flex items-center justify-between">
+    <a class="font-headline-md text-primary flex items-center gap-2 group" href="index.html">
+      <span class="material-symbols-outlined text-secondary" style="font-variation-settings:'FILL' 1;">terminal</span>
+      agentOS
+    </a>
+    <a class="font-body-md text-on-surface-variant hover:text-secondary inline-flex items-center gap-1.5 transition-colors" href="index.html">
+      <span class="material-symbols-outlined" style="font-size:18px">arrow_back</span>
+      Back to site
+    </a>
+  </div>
+</nav>
+
+<main class="flex-grow">
+  <article class="max-w-3xl mx-auto px-margin py-16 prose-doc">
+    <p class="font-label-sm uppercase tracking-wider text-on-surface-variant mb-3">Legal</p>
+    <h1 class="font-display-lg text-display-lg text-on-background mb-6">Privacy</h1>
+
+    <p class="font-body-lg text-body-lg text-on-surface-variant">agentOS is a local desktop tool. It reads your AI-assistant configuration so it can show and analyze it, and it runs that analysis on your own machine. By default, your configuration, file contents, and prompts stay on your device and are never sent to us or to any third party. Two explicit, opt-in actions can send content off your device, and only to a destination <em>you</em> configure: <strong>LLM connectivity</strong>, which sends one or more resources you choose to an AI endpoint (for example, a pair of conflicting resources when you ask the model to resolve an overlap; see "LLM connectivity"), and <strong>skill sync</strong> via the <code>agentos</code> command-line tool, which can copy skill files into a Git repository and push them to your Git remote (see "Command-line tool and skill sync"). Neither happens unless you trigger it, and in both cases agentOS itself never receives your content.</p>
+
+    <p class="font-code-md text-code-md text-on-surface-variant">Last updated: 2026-06-14.</p>
+
+    <h2 class="font-headline-md text-headline-md text-on-background">What agentOS reads (locally)</h2>
+    <ul class="font-body-lg text-body-lg text-on-surface-variant">
+      <li>Your global Claude config under <code>~/.claude</code> (skills, agents, commands, rules, <code>CLAUDE.md</code>, settings, MCP servers, hooks).</li>
+      <li>When you open a project: that project's <code>.claude</code>, <code>.cursor</code>, <code>.github/copilot-instructions.md</code>, and <code>CLAUDE.md</code>.</li>
+      <li>Your Claude Code session transcripts under <code>~/.claude/projects</code>, in two cases: (1) when you open a session in the Telemetry view, to show what each tool call did; and (2) if you turn on "Prompt evidence" (off by default, see below), to find real past prompts that would trigger two overlapping skills, agents, or commands.</li>
+      <li>When you click a file or folder path anywhere in the app (the "peek" preview), the contents of that file, or the list of names inside that folder, so it can be shown in the popover. Only paths inside your home folder or a project you have opened can be previewed, and credential files (<code>.env</code>, keys, tokens) stay hidden unless you opt in under Settings. The preview is read and rendered locally and is never uploaded.</li>
+    </ul>
+    <p class="font-body-lg text-body-lg text-on-surface-variant">These are read to display and analyze them. agentOS only writes to a file when you ask it to (toggling a resource on or off, editing a resource's body, or adding a tag).</p>
+    <p class="font-body-lg text-body-lg text-on-surface-variant">The <code>agentos</code> command-line tool reads the same local config from your terminal instead of the window; it reads the same files for the same purpose and sends nothing off-device on its own (its one off-device action, sync push, is described under "Command-line tool and skill sync").</p>
+
+    <h3 class="font-headline-md text-on-background">Prompt evidence (off by default)</h3>
+    <p class="font-body-lg text-body-lg text-on-surface-variant">Conflict analysis can show you a real prompt from your own history that would match two resources at once, so you can see the overlap concretely instead of as a percentage. This is <strong>off by default.</strong> When you turn it on (Settings, "Prompt evidence"), agentOS reads the user prompts from your local transcripts, compares them against your resource descriptions on your machine, and may display a short, truncated prompt next to a conflict. Your prompts are read and compared <strong>locally only</strong> and are never uploaded. Turn it off at any time to stop reading transcripts for this purpose.</p>
+
+    <h2 class="font-headline-md text-headline-md text-on-background">What agentOS stores (locally, on your device)</h2>
+    <ul class="font-body-lg text-body-lg text-on-surface-variant">
+      <li>Usage counts and your tags, under <code>~/.claude/agentos</code> and <code>~/.agentos</code>.</li>
+      <li>Your preferences, under <code>~/.agentos/settings.json</code> (including whether "Prompt evidence" is on).</li>
+      <li>Your connectivity settings, under <code>~/.agentos/connectivity.json</code> (whether it's enabled, provider, model, base URL) — this file <strong>never</strong> contains your API key.</li>
+      <li>Your API key for LLM connectivity, encrypted by the operating-system keychain (via Electron <code>safeStorage</code>) under <code>~/.agentos/connectivity.key</code>. It is never written in plaintext and is never sent back to the app's interface — agentOS only knows whether a key is present.</li>
+      <li>Conflict-analysis vectors, and (when "Prompt evidence" is on) the mined prompt text and its vectors, held in memory for the current session only. They are not written to disk in this version.</li>
+    </ul>
+
+    <h2 class="font-headline-md text-headline-md text-on-background">Network connections</h2>
+    <p class="font-body-lg text-body-lg text-on-surface-variant">agentOS works offline once set up. The first time you use conflict analysis, it downloads two things from public CDNs, and only then:</p>
+    <ul class="font-body-lg text-body-lg text-on-surface-variant">
+      <li>the language model (<code>all-MiniLM-L6-v2</code>, about 23 MB) from the HuggingFace CDN (<code>huggingface.co</code>, <code>cas-bridge.xethub.hf.co</code>); and</li>
+      <li>the WebAssembly runtime that executes it (onnxruntime-web) from the jsDelivr CDN (<code>cdn.jsdelivr.net</code>).</li>
+    </ul>
+    <p class="font-body-lg text-body-lg text-on-surface-variant">These CDNs see your IP address and which files you requested. They do <strong>not</strong> receive your skills, descriptions, prompts, file contents, or usage data.</p>
+    <p class="font-body-lg text-body-lg text-on-surface-variant">After both are cached, the analysis runs entirely on your device with no further network calls. <strong>None of your content ever leaves your machine.</strong> (A future version may bundle the runtime to drop the jsDelivr dependency and allow fully offline first use.)</p>
+    <p class="font-body-lg text-body-lg text-on-surface-variant">To clear the cached model, clear the application's cache (it lives in the app's standard cache storage and is re-downloaded on next use).</p>
+
+    <h2 class="font-headline-md text-headline-md text-on-background">LLM connectivity (off by default)</h2>
+    <p class="font-body-lg text-body-lg text-on-surface-variant">agentOS can optimize a skill, agent, or command's description and contents using a language model, and can use the same model to resolve a conflict between two overlapping resources. This is the only in-app (window) feature that sends your content off your device (skill sync, below, is the other off-device action, and runs from the command line), and it is <strong>off by default</strong>.</p>
+    <ul class="font-body-lg text-body-lg text-on-surface-variant">
+      <li><strong>Nothing is sent until you opt in.</strong> You must enable connectivity <em>and</em> store an API key in the Connectivity menu. Even then, content is only sent when you press <strong>Optimize</strong> on a specific resource, or use a model-driven action in the conflict resolver, and only for the resource(s) involved.</li>
+      <li><strong>What is sent:</strong> for Optimize, the chosen resource's description and body, plus the names and descriptions of its same-kind siblings. For conflict resolution, the description and body of the two resources in the pair you are resolving. Nothing else — no other files, no transcripts, no usage data.</li>
+      <li><strong>Where it goes:</strong> only to the endpoint <em>you</em> configure (by default <code>https://api.anthropic.com</code> for the Anthropic provider, or an OpenAI-compatible base URL you set). It does <strong>not</strong> go to agentOS or its authors. Once the request reaches that endpoint, the provider's own privacy terms govern what they do with it.</li>
+      <li><strong>Your API key</strong> is held in the operating-system keychain (see "What agentOS stores"), encrypted, never in plaintext, and is sent only to that endpoint as the request credential.</li>
+      <li><strong>Turn it off</strong> at any time in the Connectivity menu; you can also clear the stored key there.</li>
+    </ul>
+
+    <h2 class="font-headline-md text-headline-md text-on-background">Command-line tool and skill sync</h2>
+    <p class="font-body-lg text-body-lg text-on-surface-variant">agentOS ships an optional command-line tool, <code>agentos</code>, for reading your configuration and for <strong>skill sync</strong> — copying skills you select from your global config (<code>~/.claude/skills</code>) into a project so they travel to other machines and remote Claude sessions through Git.</p>
+    <ul class="font-body-lg text-body-lg text-on-surface-variant">
+      <li><strong>Nothing leaves your device until you choose to push.</strong> <code>agentos sync</code> is a dry run by default (it only prints what it would copy). With <code>--apply</code> it copies the selected skill folders into that project's <code>.claude/skills</code> <strong>on your own disk</strong>. With <code>--commit</code> it makes a local Git commit. None of these contact any network.</li>
+      <li><strong>What can leave your device:</strong> only when you add <code>--push</code> (which asks you to confirm) does it run <code>git push</code>, sending the committed skill files to the Git remote already configured for that repository.</li>
+      <li><strong>Where it goes:</strong> only to <em>your</em> Git remote (for example your GitHub/GitLab account or a server you control). It does <strong>not</strong> go to agentOS or its authors. Once pushed, that remote's own terms govern the data, and anyone with access to that repository can read the skills.</li>
+      <li><strong>What is sent:</strong> only the skill files you selected. No other configuration, transcripts, prompts, keys, or usage data.</li>
+    </ul>
+    <p class="font-body-lg text-body-lg text-on-surface-variant">You choose which skills to sync and whether to push; the tool never pushes on its own.</p>
+
+    <h2 class="font-headline-md text-headline-md text-on-background">Telemetry</h2>
+    <p class="font-body-lg text-body-lg text-on-surface-variant">Local usage logging only. The optional sync setting is off by default and performs no upload in this version.</p>
+
+    <h2 class="font-headline-md text-headline-md text-on-background">Dependencies and security</h2>
+    <ul class="font-body-lg text-body-lg text-on-surface-variant">
+      <li>New dependencies are checked for active supply-chain compromise (for example the Shai-Hulud npm campaigns) before installation.</li>
+      <li>Dependencies are installed with <code>--ignore-scripts</code> (no install-time code execution) and pinned to exact versions with a committed lockfile.</li>
+      <li>The embedding model runs on WebAssembly in the renderer. No native add-ons are built or used.</li>
+      <li><code>npm audit</code> advisories are limited to the development-time build toolchain (esbuild / vite), which is not shipped to end users. The runtime dependency tree carries no known critical or high advisories.</li>
+    </ul>
+
+    <h2 class="font-headline-md text-headline-md text-on-background">Changes to this policy</h2>
+    <p class="font-body-lg text-body-lg text-on-surface-variant">This document is updated whenever a new data path is added, in the same change that adds it. Reading conversation transcripts (from <code>~/.claude/projects</code>) to improve conflict analysis is described above under "Prompt evidence". It runs <strong>locally</strong>, is <strong>off by default</strong>, and can be turned off at any time. Sending a resource to a language model for optimization is described under "LLM connectivity"; it is <strong>off by default</strong> and goes only to an endpoint you configure. The other off-device path, <strong>skill sync</strong> (<code>agentos sync --push</code>), is described under "Command-line tool and skill sync"; it runs only when you invoke it, sends only the skills you select, and goes only to your own Git remote.</p>
+
+    <p class="mt-12"><a href="terms.html" class="font-body-md text-secondary hover:underline">Read the Terms of Use →</a></p>
+  </article>
+</main>
+
+<footer class="border-t border-black/10">
+  <div class="max-w-container-max mx-auto px-margin py-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+    <p class="font-code-md text-xs text-on-surface-variant">agentOS &middot; local-first by default.</p>
+    <div class="flex items-center gap-6">
+      <a class="font-body-md text-sm text-on-surface-variant hover:text-secondary" href="index.html">Home</a>
+      <a class="font-body-md text-sm text-on-surface-variant hover:text-secondary" href="terms.html">Terms</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

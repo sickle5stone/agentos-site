@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Terms of Use — agentOS</title>
+<meta name="description" content="Terms of Use for agentOS, a local tool for inspecting and managing your own AI-assistant configuration."/>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23523fde'/%3E%3Cpath d='M9 11l5 5-5 5' fill='none' stroke='white' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M17 21h6' stroke='white' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<script>
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          secondary: "#523fde",
+          surface: "#fdf8f7",
+          "surface-container": "#f1edec",
+          "surface-container-lowest": "#ffffff",
+          background: "#fdf8f7",
+          primary: "#000000",
+          "on-background": "#1c1b1b",
+          "on-surface": "#1c1b1b",
+          "on-surface-variant": "#4b463f",
+          "on-secondary": "#ffffff",
+        },
+        spacing: { margin: "40px", "container-max": "1200px" },
+        fontFamily: {
+          "body-md": ["Hanken Grotesk"],
+          "body-lg": ["Hanken Grotesk"],
+          "display-lg": ["Hanken Grotesk"],
+          "headline-md": ["Hanken Grotesk"],
+          "code-md": ["JetBrains Mono"],
+          "label-sm": ["JetBrains Mono"],
+        },
+        fontSize: {
+          "body-md": ["14px", { lineHeight: "20px", fontWeight: "400" }],
+          "body-lg": ["16px", { lineHeight: "26px", fontWeight: "400" }],
+          "display-lg": ["40px", { lineHeight: "48px", letterSpacing: "-0.02em", fontWeight: "600" }],
+          "headline-md": ["22px", { lineHeight: "30px", fontWeight: "600" }],
+          "code-md": ["13px", { lineHeight: "20px", fontWeight: "400" }],
+          "label-sm": ["11px", { lineHeight: "16px", letterSpacing: "0.05em", fontWeight: "500" }],
+        },
+      },
+    },
+  };
+</script>
+<style>
+  .warm-hairline { border: 1px solid rgba(0, 0, 0, 0.08); }
+  .prose-doc h2 { margin-top: 2.5rem; margin-bottom: 0.75rem; padding-top: 2rem; border-top: 1px solid rgba(28,26,23,0.08); }
+  .prose-doc p { margin-bottom: 1rem; }
+  .prose-doc ul { margin: 0 0 1.25rem 0; padding-left: 0; list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+  .prose-doc li { padding-left: 1.25rem; position: relative; }
+  .prose-doc li::before { content: ""; position: absolute; left: 0; top: 0.65em; width: 5px; height: 5px; border-radius: 9999px; background: #523fde; opacity: 0.55; }
+  .prose-doc code { font-family: "JetBrains Mono", monospace; font-size: 0.88em; background: rgba(244,241,236,0.85); padding: 0.1em 0.35em; border-radius: 0.3em; }
+  .prose-doc a { color: #523fde; text-decoration: none; }
+  .prose-doc a:hover { text-decoration: underline; }
+  .prose-doc strong { font-weight: 600; }
+</style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col font-body-md antialiased">
+
+<nav class="border-b border-black/10 bg-surface/80 backdrop-blur-xl">
+  <div class="max-w-container-max mx-auto px-margin h-20 flex items-center justify-between">
+    <a class="font-headline-md text-primary flex items-center gap-2 group" href="index.html">
+      <span class="material-symbols-outlined text-secondary" style="font-variation-settings:'FILL' 1;">terminal</span>
+      agentOS
+    </a>
+    <a class="font-body-md text-on-surface-variant hover:text-secondary inline-flex items-center gap-1.5 transition-colors" href="index.html">
+      <span class="material-symbols-outlined" style="font-size:18px">arrow_back</span>
+      Back to site
+    </a>
+  </div>
+</nav>
+
+<main class="flex-grow">
+  <article class="max-w-3xl mx-auto px-margin py-16 prose-doc">
+    <p class="font-label-sm uppercase tracking-wider text-on-surface-variant mb-3">Legal</p>
+    <h1 class="font-display-lg text-display-lg text-on-background mb-6">Terms of Use</h1>
+
+    <p class="font-body-lg text-body-lg text-on-surface-variant">agentOS is a local tool for inspecting and managing your own AI-assistant configuration.</p>
+    <p class="font-code-md text-code-md text-on-surface-variant">Last updated: 2026-06-14.</p>
+
+    <h2 class="font-headline-md text-headline-md text-on-background">The basics</h2>
+    <ul class="font-body-lg text-body-lg text-on-surface-variant">
+      <li>agentOS is provided "as is", without warranty of any kind. You use it at your own risk.</li>
+      <li>It reads and, only at your explicit direction, edits configuration files that already exist on your machine. You are responsible for the changes you make through it (enabling or disabling resources, editing their contents, adding tags).</li>
+      <li>With your opt-in ("Prompt evidence", off by default), it also reads your local Claude Code transcripts to find example prompts for overlapping resources. This runs locally. See <a href="privacy.html">Privacy</a>.</li>
+      <li>With your opt-in ("LLM connectivity", off by default), it can send one or more resources you choose — a single resource to optimize, or a pair of resources when you resolve a conflict — to a language-model endpoint you configure, using an API key you provide. You are responsible for that key, for any usage costs the provider charges, and for complying with that provider's terms. agentOS sends your content only to the endpoint you set, never to us. See <a href="privacy.html">Privacy</a>.</li>
+      <li>The optional <code>agentos</code> command-line tool can sync skills you select into a Git repository and, only when you pass <code>--push</code> and confirm, push them to the Git remote you have configured. You are responsible for choosing what to sync, for the remote you push to, and for who can then access that repository. agentOS pushes only the skills you select and only to your remote, never to us. See <a href="privacy.html">Privacy</a>.</li>
+      <li>Apart from these opt-in actions, agentOS does not transmit your configuration or content. See <a href="privacy.html">Privacy</a> for what touches the network.</li>
+    </ul>
+
+    <h2 class="font-headline-md text-headline-md text-on-background">Third-party components</h2>
+    <ul class="font-body-lg text-body-lg text-on-surface-variant">
+      <li>Conflict analysis downloads and runs an open-source model (<code>all-MiniLM-L6-v2</code>) via the HuggingFace CDN. That download is subject to the model's and HuggingFace's respective licenses and terms.</li>
+      <li>If you enable LLM connectivity, requests go to the third-party model endpoint you configure (for example Anthropic, or any OpenAI-compatible provider). Your use of that endpoint is governed by that provider's terms and pricing, not by agentOS.</li>
+      <li>agentOS bundles open-source software under their respective licenses.</li>
+    </ul>
+
+    <h2 class="font-headline-md text-headline-md text-on-background">Your data</h2>
+    <p class="font-body-lg text-body-lg text-on-surface-variant">You own your configuration and your data. agentOS claims no rights over them.</p>
+
+    <h2 class="font-headline-md text-headline-md text-on-background">Changes</h2>
+    <p class="font-body-lg text-body-lg text-on-surface-variant">These terms may change as the app gains functionality. Material changes will be reflected in this file.</p>
+
+    <p class="mt-12"><a href="privacy.html" class="font-body-md text-secondary hover:underline">Read the Privacy policy →</a></p>
+  </article>
+</main>
+
+<footer class="border-t border-black/10">
+  <div class="max-w-container-max mx-auto px-margin py-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+    <p class="font-code-md text-xs text-on-surface-variant">agentOS &middot; local-first by default.</p>
+    <div class="flex items-center gap-6">
+      <a class="font-body-md text-sm text-on-surface-variant hover:text-secondary" href="index.html">Home</a>
+      <a class="font-body-md text-sm text-on-surface-variant hover:text-secondary" href="privacy.html">Privacy</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

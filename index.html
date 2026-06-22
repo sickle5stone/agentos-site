@@ -4,6 +4,7 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>agentOS - See what ls ~/.claude can't.</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23523fde'/%3E%3Cpath d='M9 11l5 5-5 5' fill='none' stroke='white' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M17 21h6' stroke='white' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E"/>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
@@ -215,30 +216,38 @@ void main() {
 <div class="max-w-container-max mx-auto px-margin h-20 flex justify-between items-center">
 <div class="flex items-center gap-8">
 <!-- Brand -->
-<a class="font-headline-md text-headline-md text-primary flex items-center gap-2 group" href="#">
+<a class="font-headline-md text-headline-md text-primary flex items-center gap-2 group" href="#top">
 <span class="material-symbols-outlined text-secondary transition-transform group-hover:scale-110" style="font-variation-settings: 'FILL' 1;">terminal</span>
                     agentOS
                 </a>
 <!-- Navigation Links (Desktop) -->
 <div class="hidden md:flex items-center gap-6">
-<a class="font-body-lg text-body-lg text-secondary font-medium active:scale-95 duration-200" href="#">Features</a>
-<a class="font-body-lg text-body-lg text-on-surface-variant hover:text-secondary transition-colors active:scale-95 duration-200" href="#">Privacy</a>
-<a class="font-body-lg text-body-lg text-on-surface-variant hover:text-secondary transition-colors active:scale-95 duration-200" href="#">Download</a>
+<a class="font-body-lg text-body-lg text-secondary font-medium active:scale-95 duration-200" href="#features">Features</a>
+<a class="font-body-lg text-body-lg text-on-surface-variant hover:text-secondary transition-colors active:scale-95 duration-200" href="#privacy">Privacy</a>
+<a class="font-body-lg text-body-lg text-on-surface-variant hover:text-secondary transition-colors active:scale-95 duration-200" href="#download" data-download>Download</a>
 </div>
 </div>
 <!-- Actions -->
 <div class="flex items-center gap-4">
-<a class="hidden md:inline-flex items-center justify-center h-10 px-6 rounded-lg bg-secondary text-white font-body-md font-medium hover:opacity-90 transition-colors active:scale-95" href="#">
+<a class="hidden md:inline-flex items-center justify-center h-10 px-6 rounded-lg bg-secondary text-white font-body-md font-medium hover:opacity-90 transition-colors active:scale-95" href="#download" data-download>
                     Download for macOS
                 </a>
-<button aria-label="Menu" class="md:hidden p-2 text-on-surface-variant">
+<button aria-label="Open menu" aria-controls="mobile-menu" aria-expanded="false" id="menu-toggle" class="md:hidden p-2 text-on-surface-variant">
 <span class="material-symbols-outlined">menu</span>
 </button>
 </div>
 </div>
+<!-- Mobile menu -->
+<div id="mobile-menu" hidden class="md:hidden border-t border-black/10 bg-surface/95 backdrop-blur-xl">
+<div class="px-margin py-4 flex flex-col gap-1">
+<a class="font-body-lg text-body-lg text-on-surface-variant hover:text-secondary py-2" href="#features">Features</a>
+<a class="font-body-lg text-body-lg text-on-surface-variant hover:text-secondary py-2" href="#privacy">Privacy</a>
+<a class="font-body-lg text-body-lg text-secondary font-medium py-2" href="#download" data-download>Download for macOS</a>
+</div>
+</div>
 </nav>
 <!-- Main Content -->
-<main class="flex-grow pt-32 pb-24 relative z-10 flex items-center">
+<main id="top" class="flex-grow pt-32 pb-24 relative z-10 flex items-center">
 <div class="max-w-container-max mx-auto px-margin w-full grid grid-cols-1 lg:grid-cols-12 gap-gutter items-center">
 <!-- Hero Text -->
 <div class="lg:col-span-5 flex flex-col items-start gap-8 z-20">
@@ -255,7 +264,7 @@ void main() {
                     </p>
 </div>
 <div class="flex flex-col gap-3 w-full sm:w-auto">
-<button class="h-14 px-8 rounded-xl bg-secondary text-on-secondary font-headline-md text-[18px] font-medium shadow-lg shadow-secondary/20 hover:shadow-xl hover:shadow-secondary/30 hover:-translate-y-0.5 transition-all active:scale-95 flex items-center justify-center gap-2">
+<button data-download class="h-14 px-8 rounded-xl bg-secondary text-on-secondary font-headline-md text-[18px] font-medium shadow-lg shadow-secondary/20 hover:shadow-xl hover:shadow-secondary/30 hover:-translate-y-0.5 transition-all active:scale-95 flex items-center justify-center gap-2">
 <span class="material-symbols-outlined">download</span>
                         Download for macOS
                     </button>
@@ -288,7 +297,7 @@ void main() {
 </div>
 </main>
 <!-- ===== SECTION: seven-kinds ===== -->
-<section aria-labelledby="kinds-heading" class="py-24">
+<section id="features" aria-labelledby="kinds-heading" class="py-24 scroll-mt-24">
   <div class="max-w-container-max mx-auto px-margin">
 
     <!-- Header -->
@@ -422,7 +431,7 @@ void main() {
 </section>
 
 <!-- ===== SECTION: conflict-deepdive ===== -->
-<section aria-labelledby="conflict-heading" class="py-24">
+<section id="conflict-detection" aria-labelledby="conflict-heading" class="py-24 scroll-mt-24">
   <div class="max-w-container-max mx-auto px-margin">
     <div class="flex flex-col gap-12 lg:grid lg:grid-cols-2 lg:gap-gutter lg:items-center">
 
@@ -564,7 +573,7 @@ void main() {
 </section>
 
 <!-- ===== SECTION: privacy ===== -->
-<section aria-labelledby="privacy-heading" class="py-24">
+<section id="privacy" aria-labelledby="privacy-heading" class="py-24 scroll-mt-24">
   <div class="max-w-container-max mx-auto px-margin">
 
     <!-- Eyebrow + heading -->
@@ -677,7 +686,7 @@ void main() {
 </section>
 
 <!-- ===== SECTION: founder-footer ===== -->
-<section aria-labelledby="closing-heading" class="py-24">
+<section id="download" aria-labelledby="closing-heading" class="py-24 scroll-mt-24">
   <div class="max-w-container-max mx-auto px-margin flex flex-col items-center gap-20">
 
     <!-- Founder note -->
@@ -721,6 +730,7 @@ void main() {
 
       <a
         href="#download"
+        data-download
         class="inline-flex items-center gap-3 rounded-xl px-8 font-headline-md text-white bg-secondary transition-all duration-200 ease-out hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-secondary"
         style="height: 3.5rem; font-size: 1rem; letter-spacing: -0.01em; text-decoration: none; box-shadow: 0 1px 2px rgba(82,63,222,0.15), 0 8px 24px -4px rgba(82,63,222,0.35);"
       >
@@ -743,7 +753,7 @@ void main() {
   style="border-top: 1px solid rgba(28,26,23,0.08);"
 >
   <div class="max-w-container-max mx-auto px-margin py-16">
-    <div class="grid grid-cols-1 md:grid-cols-[1fr_auto_auto_auto] gap-12 md:gap-16">
+    <div class="grid grid-cols-1 md:grid-cols-[1fr_auto_auto] gap-12 md:gap-16">
 
       <!-- Wordmark + tagline -->
       <div class="flex flex-col gap-4">
@@ -794,37 +804,6 @@ void main() {
         </ul>
       </nav>
 
-      <!-- Resources links -->
-      <nav aria-labelledby="footer-resources-heading">
-        <p
-          id="footer-resources-heading"
-          class="font-label-sm text-xs font-semibold uppercase tracking-widest mb-4 text-on-surface-variant"
-        >Resources</p>
-        <ul class="flex flex-col gap-3 list-none m-0 p-0" role="list">
-          <li>
-            <a
-              href="#docs"
-              class="font-body-md text-sm text-on-surface-variant transition-colors duration-150 ease-out hover:text-secondary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-secondary rounded"
-              style="text-decoration: none;"
-            >Docs</a>
-          </li>
-          <li>
-            <a
-              href="#cli"
-              class="font-body-md text-sm text-on-surface-variant transition-colors duration-150 ease-out hover:text-secondary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-secondary rounded"
-              style="text-decoration: none;"
-            >CLI</a>
-          </li>
-          <li>
-            <a
-              href="#changelog"
-              class="font-body-md text-sm text-on-surface-variant transition-colors duration-150 ease-out hover:text-secondary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-secondary rounded"
-              style="text-decoration: none;"
-            >Changelog</a>
-          </li>
-        </ul>
-      </nav>
-
       <!-- Legal links -->
       <nav aria-labelledby="footer-legal-heading">
         <p
@@ -834,14 +813,14 @@ void main() {
         <ul class="flex flex-col gap-3 list-none m-0 p-0" role="list">
           <li>
             <a
-              href="#privacy-policy"
+              href="privacy.html"
               class="font-body-md text-sm text-on-surface-variant transition-colors duration-150 ease-out hover:text-secondary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-secondary rounded"
               style="text-decoration: none;"
             >Privacy</a>
           </li>
           <li>
             <a
-              href="#terms"
+              href="terms.html"
               class="font-body-md text-sm text-on-surface-variant transition-colors duration-150 ease-out hover:text-secondary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-secondary rounded"
               style="text-decoration: none;"
             >Terms</a>
@@ -853,4 +832,59 @@ void main() {
   </div>
 </footer>
 
+<!-- ===== Gated download modal ===== -->
+<div
+  id="gate"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="gate-title"
+  hidden
+  class="fixed inset-0 z-[100] items-center justify-center bg-black/40 backdrop-blur-sm p-4"
+>
+  <div class="relative w-full max-w-md bg-surface rounded-2xl warm-hairline deep-soft-shadow p-8 flex flex-col gap-5">
+    <span
+      aria-hidden="true"
+      class="w-11 h-11 rounded-xl bg-secondary/10 text-secondary flex items-center justify-center"
+    >
+      <span class="material-symbols-outlined" style="font-variation-settings:'wght' 400">lock</span>
+    </span>
+    <div class="flex flex-col gap-2">
+      <h3 id="gate-title" class="font-headline-md text-on-background">Early access</h3>
+      <p class="font-body-md text-on-surface-variant">
+        The macOS build is gated during the private MVP. Enter your access code to unlock the download.
+      </p>
+    </div>
+    <form id="gate-form" autocomplete="off" class="flex flex-col gap-3">
+      <input
+        id="gate-input"
+        name="code"
+        type="password"
+        inputmode="text"
+        placeholder="access code"
+        aria-label="Access code"
+        autocomplete="off"
+        spellcheck="false"
+        class="h-12 px-4 rounded-xl bg-surface-container warm-hairline font-code-md text-on-background placeholder:text-on-surface-variant focus:outline-none focus:ring-2 focus:ring-secondary"
+      />
+      <p class="font-body-md text-error min-h-[1.25rem]" id="gate-err" role="alert" aria-live="assertive"></p>
+      <button
+        type="submit"
+        class="h-12 rounded-xl bg-secondary text-on-secondary font-headline-md text-base font-medium hover:opacity-90 active:scale-95 transition"
+      >Unlock download</button>
+    </form>
+    <p class="font-label-sm uppercase tracking-wider text-on-surface-variant text-center">
+      private MVP &middot; access code required
+    </p>
+    <button
+      type="button"
+      id="gate-close"
+      aria-label="Close"
+      class="absolute top-4 right-4 w-8 h-8 rounded-lg flex items-center justify-center text-on-surface-variant hover:bg-surface-container transition"
+    >
+      <span class="material-symbols-outlined" style="font-size:20px">close</span>
+    </button>
+  </div>
+</div>
+
+<script src="app.js"></script>
 </body></html>
