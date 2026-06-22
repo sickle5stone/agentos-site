@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>agentOS - See what ls ~/.claude can't.</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-fixed-variant": "#474649",
+                        "surface-container": "#f1edec",
+                        "on-primary": "#ffffff",
+                        "surface": "#fdf8f7",
+                        "on-primary-fixed": "#1d1b18",
+                        "outline-variant": "#cdc5bc",
+                        "error-container": "#ffdad6",
+                        "inverse-primary": "#cbc5c0",
+                        "outline": "#7c766e",
+                        "tertiary-fixed-dim": "#c8c6c8",
+                        "on-primary-fixed-variant": "#494643",
+                        "tertiary-fixed": "#e4e2e4",
+                        "primary-fixed": "#e7e1dc",
+                        "secondary": "#523fde",
+                        "inverse-surface": "#313030",
+                        "surface-container-highest": "#e6e2e0",
+                        "on-secondary-container": "#fffbff",
+                        "on-tertiary-container": "#858386",
+                        "surface-container-low": "#f7f3f1",
+                        "surface-tint": "#615e5a",
+                        "on-error-container": "#93000a",
+                        "surface-variant": "#e6e2e0",
+                        "primary-fixed-dim": "#cbc5c0",
+                        "tertiary": "#000000",
+                        "on-primary-container": "#87837f",
+                        "on-background": "#1c1b1b",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-fixed-dim": "#c5c0ff",
+                        "secondary-fixed": "#e4dfff",
+                        "primary": "#000000",
+                        "surface-dim": "#ddd9d8",
+                        "on-secondary": "#ffffff",
+                        "on-surface": "#1c1b1b",
+                        "on-surface-variant": "#4b463f",
+                        "tertiary-container": "#1b1b1d",
+                        "on-error": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary-fixed-variant": "#3b21c9",
+                        "error": "#ba1a1a",
+                        "inverse-on-surface": "#f4f0ee",
+                        "on-secondary-fixed": "#140067",
+                        "background": "#fdf8f7",
+                        "secondary-container": "#6b5cf8",
+                        "surface-bright": "#fdf8f7",
+                        "on-tertiary-fixed": "#1b1b1d",
+                        "primary-container": "#1d1b18",
+                        "surface-container-high": "#ebe7e6"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "24px",
+                        "unit": "4px",
+                        "container-max": "1200px",
+                        "margin": "40px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Hanken Grotesk"],
+                        "body-lg": ["Hanken Grotesk"],
+                        "display-lg": ["Hanken Grotesk"],
+                        "headline-lg": ["Hanken Grotesk"],
+                        "headline-md": ["Hanken Grotesk"],
+                        "code-md": ["JetBrains Mono"],
+                        "label-sm": ["JetBrains Mono"]
+                    },
+                    "fontSize": {
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "500" }],
+                        "code-md": ["13px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "label-sm": ["11px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .warm-hairline { border: 1px solid rgba(0, 0, 0, 0.08); }
+        .deep-soft-shadow { box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.06), 0 18px 36px -18px rgba(0, 0, 0, 0.04); }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col relative overflow-x-hidden font-body-md antialiased selection:bg-secondary-container selection:text-on-secondary-container">
+<!-- Background Shader -->
+<!-- STITCH_SHADER_START:ANIMATION_2 class="absolute inset-0 w-full h-full -z-10 pointer-events-none opacity-40" -->
+<div class="absolute inset-0 w-full h-full -z-10 pointer-events-none opacity-40" style="display:block;">
+<canvas id="shader-canvas-ANIMATION_2" style="display:block;width:100%;height:100%"></canvas>
+<script>
+(function() {
+  const canvas = document.getElementById('shader-canvas-ANIMATION_2');
+
+  // Sync the WebGL drawing-buffer size with the CSS-driven layout size.
+  // This fires on initial layout and whenever the element is resized.
+  function syncSize() {
+    const w = canvas.clientWidth  || 1280;
+    const h = canvas.clientHeight || 720;
+    if (canvas.width !== w || canvas.height !== h) {
+      canvas.width  = w;
+      canvas.height = h;
+    }
+  }
+  if (typeof ResizeObserver !== 'undefined') {
+    new ResizeObserver(syncSize).observe(canvas);
+  }
+  syncSize();
+
+  const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+  if (!gl) return;
+  const vs = `attribute vec2 a_position;
+varying vec2 v_texCoord;
+void main() {
+  v_texCoord = a_position * 0.5 + 0.5;
+  gl_Position = vec4(a_position, 0.0, 1.0);
+}`;
+  const fs = `precision highp float;
+uniform float u_time;
+uniform vec2 u_resolution;
+
+void main() {
+    vec2 uv = gl_FragCoord.xy / u_resolution.xy;
+    
+    // Slow drifting motion
+    float t = u_time * 0.2;
+    
+    // Electric Violet (#6d5efa) bloom
+    vec2 violetPos = vec2(0.3 + 0.1 * sin(t), 0.7 + 0.1 * cos(t * 0.8));
+    float violetDist = length(uv - violetPos);
+    float violetIntensity = smoothstep(0.6, 0.0, violetDist) * 0.08;
+    vec3 violet = vec3(0.427, 0.369, 0.980) * violetIntensity;
+    
+    // Soft Green (#1fc16b) bloom
+    vec2 greenPos = vec2(0.8 + 0.1 * cos(t * 1.2), 0.3 + 0.1 * sin(t * 0.9));
+    float greenDist = length(uv - greenPos);
+    float greenIntensity = smoothstep(0.5, 0.0, greenDist) * 0.06;
+    vec3 green = vec3(0.122, 0.757, 0.420) * greenIntensity;
+    
+    // Base warm background gradient
+    vec3 topColor = vec3(0.988, 0.984, 0.976); // #fcfbf9
+    vec3 bottomColor = vec3(0.953, 0.937, 0.914); // #f3efe9
+    vec3 base = mix(topColor, bottomColor, uv.y);
+    
+    gl_FragColor = vec4(base + violet + green, 1.0);
+}`;
+  function cs(type, src) {
+    const s = gl.createShader(type);
+    gl.shaderSource(s, src);
+    gl.compileShader(s);
+    return s;
+  }
+  const prog = gl.createProgram();
+  gl.attachShader(prog, cs(gl.VERTEX_SHADER, vs));
+  gl.attachShader(prog, cs(gl.FRAGMENT_SHADER, fs));
+  gl.linkProgram(prog);
+  gl.useProgram(prog);
+  const buf = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
+  const pos = gl.getAttribLocation(prog, 'a_position');
+  gl.enableVertexAttribArray(pos);
+  gl.vertexAttribPointer(pos, 2, gl.FLOAT, false, 0, 0);
+  const uTime = gl.getUniformLocation(prog, 'u_time');
+  const uRes = gl.getUniformLocation(prog, 'u_resolution');
+  const uMouse = gl.getUniformLocation(prog, 'u_mouse');
+
+  // u_mouse is in pixel coordinates matching u_resolution (ShaderToy convention).
+  // Shaders that need normalized coords should use: u_mouse / u_resolution.
+  let mouse = { x: canvas.width / 2, y: canvas.height / 2 };
+  window.addEventListener('mousemove', (event) => {
+    const rect = canvas.getBoundingClientRect();
+    if (rect.width && rect.height) {
+      const nx = (event.clientX - rect.left) / rect.width;
+      const ny = 1.0 - (event.clientY - rect.top) / rect.height;
+      mouse.x = nx * canvas.width;
+      mouse.y = ny * canvas.height;
+    }
+  });
+
+  function render(t) {
+    if (typeof ResizeObserver === 'undefined') syncSize();
+    gl.viewport(0, 0, canvas.width, canvas.height);
+    if (uTime) gl.uniform1f(uTime, t * 0.001);
+    if (uRes) gl.uniform2f(uRes, canvas.width, canvas.height);
+    if (uMouse) gl.uniform2f(uMouse, mouse.x, mouse.y);
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    requestAnimationFrame(render);
+  }
+  render(0);
+})();
+</script>
+</div>
+<!-- STITCH_SHADER_END:ANIMATION_2 -->
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-xl border-b border-black/10 shadow-sm transition-all duration-300">
+<div class="max-w-container-max mx-auto px-margin h-20 flex justify-between items-center">
+<div class="flex items-center gap-8">
+<!-- Brand -->
+<a class="font-headline-md text-headline-md text-primary flex items-center gap-2 group" href="#">
+<span class="material-symbols-outlined text-secondary transition-transform group-hover:scale-110" style="font-variation-settings: 'FILL' 1;">terminal</span>
+                    agentOS
+                </a>
+<!-- Navigation Links (Desktop) -->
+<div class="hidden md:flex items-center gap-6">
+<a class="font-body-lg text-body-lg text-secondary font-medium active:scale-95 duration-200" href="#">Features</a>
+<a class="font-body-lg text-body-lg text-on-surface-variant hover:text-secondary transition-colors active:scale-95 duration-200" href="#">Privacy</a>
+<a class="font-body-lg text-body-lg text-on-surface-variant hover:text-secondary transition-colors active:scale-95 duration-200" href="#">Download</a>
+</div>
+</div>
+<!-- Actions -->
+<div class="flex items-center gap-4">
+<a class="hidden md:inline-flex items-center justify-center h-10 px-6 rounded-lg bg-secondary text-white font-body-md font-medium hover:opacity-90 transition-colors active:scale-95" href="#">
+                    Download for macOS
+                </a>
+<button aria-label="Menu" class="md:hidden p-2 text-on-surface-variant">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</div>
+</div>
+</nav>
+<!-- Main Content -->
+<main class="flex-grow pt-32 pb-24 relative z-10 flex items-center">
+<div class="max-w-container-max mx-auto px-margin w-full grid grid-cols-1 lg:grid-cols-12 gap-gutter items-center">
+<!-- Hero Text -->
+<div class="lg:col-span-5 flex flex-col items-start gap-8 z-20">
+<div class="flex flex-col gap-6">
+<div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface-container-high warm-hairline">
+<span class="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.4)]"></span>
+<span class="font-code-md text-code-md text-on-primary-fixed-variant">~/.claude has outgrown the terminal</span>
+</div>
+<h1 class="font-display-lg text-display-lg text-primary tracking-tight max-w-lg leading-tight">
+                        See what <span class="font-code-md text-[40px] px-1 bg-surface-container-highest rounded text-on-surface">ls ~/.claude</span> can't.
+                    </h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-md leading-relaxed">
+                        agentOS reads your AI-assistant config and shows which of your skills, agents, and commands are secretly fighting each other for routing.
+                    </p>
+</div>
+<div class="flex flex-col gap-3 w-full sm:w-auto">
+<button class="h-14 px-8 rounded-xl bg-secondary text-on-secondary font-headline-md text-[18px] font-medium shadow-lg shadow-secondary/20 hover:shadow-xl hover:shadow-secondary/30 hover:-translate-y-0.5 transition-all active:scale-95 flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">download</span>
+                        Download for macOS
+                    </button>
+<p class="font-body-md text-body-md text-on-tertiary-container text-center sm:text-left">
+                        Free. No account. Nothing leaves your machine.
+                    </p>
+</div>
+</div>
+<!-- Product Mockup -->
+<div class="lg:col-span-7 relative mt-16 lg:mt-0 z-10">
+<!-- Decorative background blob for image -->
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-gradient-to-tr from-secondary/5 via-transparent to-primary/5 rounded-full blur-3xl -z-10"></div>
+<div class="relative w-full rounded-2xl overflow-hidden warm-hairline deep-soft-shadow bg-surface-container-lowest/50 backdrop-blur-2xl">
+<!-- Mac Window Controls Header -->
+<div class="h-10 border-b border-black/5 bg-white/40 flex items-center px-4 gap-2 backdrop-blur-md">
+<div class="w-3 h-3 rounded-full bg-[#FF5F56] border border-[#E0443E]"></div>
+<div class="w-3 h-3 rounded-full bg-[#FFBD2E] border border-[#DEA123]"></div>
+<div class="w-3 h-3 rounded-full bg-[#27C93F] border border-[#1AAB29]"></div>
+<div class="ml-4 flex-1 text-center font-code-md text-label-sm text-on-surface-variant opacity-60 pointer-events-none">~/agentOS/routing-conflict-viewer</div>
+</div>
+<!-- The actual screenshot -->
+<img alt="agentOS interface showing skill conflict resolution" class="w-full h-auto object-cover block" src="assets/app-skills.png"/>
+</div>
+<!-- Floating decorative element to enhance the 'app' feel -->
+<div class="absolute -bottom-6 -left-6 bg-surface p-4 rounded-xl warm-hairline deep-soft-shadow hidden md:flex items-center gap-3 z-20">
+<span class="material-symbols-outlined text-green-500" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="font-body-md text-body-md text-on-surface font-medium">1 Conflict Resolved</span>
+</div>
+</div>
+</div>
+</main>
+<!-- ===== SECTION: seven-kinds ===== -->
+<section aria-labelledby="kinds-heading" class="py-24">
+  <div class="max-w-container-max mx-auto px-margin">
+
+    <!-- Header -->
+    <div class="mb-14">
+      <p class="font-label-sm uppercase tracking-wider text-on-surface-variant mb-3">One window for everything</p>
+      <h2 id="kinds-heading" class="font-display-lg text-on-background mb-5">
+        Every piece of your assistant config,<br class="hidden sm:block"> in one place.
+      </h2>
+      <p class="font-body-lg text-on-surface-variant max-w-2xl">
+        agentOS reads it all from disk and treats each piece as a uniform resource you can browse, toggle, and reason about.
+      </p>
+    </div>
+
+    <!-- Seven kinds grid -->
+    <ul
+      role="list"
+      class="grid grid-cols-2 lg:grid-cols-4 gap-gutter"
+      aria-label="The seven resource kinds"
+    >
+
+      <!-- 1. Skills -->
+      <li class="bg-surface-container-lowest/60 backdrop-blur-xl rounded-2xl warm-hairline deep-soft-shadow p-6 flex flex-col gap-3">
+        <span
+          class="material-symbols-outlined text-secondary w-7 h-7 flex items-center"
+          style="font-variation-settings:'wght' 300"
+          aria-hidden="true"
+        >bolt</span>
+        <div>
+          <h3 class="font-headline-md text-on-background">Skills</h3>
+          <p class="font-body-md text-on-surface-variant mt-1">On-demand capabilities loaded by name</p>
+        </div>
+        <code class="font-label-sm text-on-surface-variant bg-surface-container/70 rounded-lg px-2.5 py-1 mt-auto inline-block w-fit">.claude/skills</code>
+      </li>
+
+      <!-- 2. Agents -->
+      <li class="bg-surface-container-lowest/60 backdrop-blur-xl rounded-2xl warm-hairline deep-soft-shadow p-6 flex flex-col gap-3">
+        <span
+          class="material-symbols-outlined text-secondary w-7 h-7 flex items-center"
+          style="font-variation-settings:'wght' 300"
+          aria-hidden="true"
+        >smart_toy</span>
+        <div>
+          <h3 class="font-headline-md text-on-background">Agents</h3>
+          <p class="font-body-md text-on-surface-variant mt-1">Subagents with their own tools and model</p>
+        </div>
+        <code class="font-label-sm text-on-surface-variant bg-surface-container/70 rounded-lg px-2.5 py-1 mt-auto inline-block w-fit">.claude/agents</code>
+      </li>
+
+      <!-- 3. Commands -->
+      <li class="bg-surface-container-lowest/60 backdrop-blur-xl rounded-2xl warm-hairline deep-soft-shadow p-6 flex flex-col gap-3">
+        <span
+          class="material-symbols-outlined text-secondary w-7 h-7 flex items-center"
+          style="font-variation-settings:'wght' 300"
+          aria-hidden="true"
+        >terminal</span>
+        <div>
+          <h3 class="font-headline-md text-on-background">Commands</h3>
+          <p class="font-body-md text-on-surface-variant mt-1">Custom slash commands you define once</p>
+        </div>
+        <code class="font-label-sm text-on-surface-variant bg-surface-container/70 rounded-lg px-2.5 py-1 mt-auto inline-block w-fit">.claude/commands</code>
+      </li>
+
+      <!-- 4. Instructions -->
+      <li class="bg-surface-container-lowest/60 backdrop-blur-xl rounded-2xl warm-hairline deep-soft-shadow p-6 flex flex-col gap-3">
+        <span
+          class="material-symbols-outlined text-secondary w-7 h-7 flex items-center"
+          style="font-variation-settings:'wght' 300"
+          aria-hidden="true"
+        >rule</span>
+        <div>
+          <h3 class="font-headline-md text-on-background">Instructions</h3>
+          <p class="font-body-md text-on-surface-variant mt-1">Rules across Claude, Cursor, and Copilot</p>
+        </div>
+        <code class="font-label-sm text-on-surface-variant bg-surface-container/70 rounded-lg px-2.5 py-1 mt-auto inline-block w-fit">rules/</code>
+      </li>
+
+      <!-- 5. Memory -->
+      <li class="bg-surface-container-lowest/60 backdrop-blur-xl rounded-2xl warm-hairline deep-soft-shadow p-6 flex flex-col gap-3">
+        <span
+          class="material-symbols-outlined text-secondary w-7 h-7 flex items-center"
+          style="font-variation-settings:'wght' 300"
+          aria-hidden="true"
+        >book</span>
+        <div>
+          <h3 class="font-headline-md text-on-background">Memory</h3>
+          <p class="font-body-md text-on-surface-variant mt-1">Persistent facts and your CLAUDE.md</p>
+        </div>
+        <code class="font-label-sm text-on-surface-variant bg-surface-container/70 rounded-lg px-2.5 py-1 mt-auto inline-block w-fit">CLAUDE.md + memory/</code>
+      </li>
+
+      <!-- 6. MCP -->
+      <li class="bg-surface-container-lowest/60 backdrop-blur-xl rounded-2xl warm-hairline deep-soft-shadow p-6 flex flex-col gap-3">
+        <span
+          class="material-symbols-outlined text-secondary w-7 h-7 flex items-center"
+          style="font-variation-settings:'wght' 300"
+          aria-hidden="true"
+        >lan</span>
+        <div>
+          <h3 class="font-headline-md text-on-background">MCP</h3>
+          <p class="font-body-md text-on-surface-variant mt-1">Model Context Protocol servers</p>
+        </div>
+        <code class="font-label-sm text-on-surface-variant bg-surface-container/70 rounded-lg px-2.5 py-1 mt-auto inline-block w-fit">.mcp.json</code>
+      </li>
+
+      <!-- 7. Hooks -->
+      <li class="bg-surface-container-lowest/60 backdrop-blur-xl rounded-2xl warm-hairline deep-soft-shadow p-6 flex flex-col gap-3">
+        <span
+          class="material-symbols-outlined text-secondary w-7 h-7 flex items-center"
+          style="font-variation-settings:'wght' 300"
+          aria-hidden="true"
+        >webhook</span>
+        <div>
+          <h3 class="font-headline-md text-on-background">Hooks</h3>
+          <p class="font-body-md text-on-surface-variant mt-1">Lifecycle automation around every tool call</p>
+        </div>
+        <code class="font-label-sm text-on-surface-variant bg-surface-container/70 rounded-lg px-2.5 py-1 mt-auto inline-block w-fit">settings.json</code>
+      </li>
+
+      <!-- Closing note — decorative; removed from AT enumeration so list count matches label -->
+      <li
+        class="bg-surface-container-lowest/60 backdrop-blur-xl rounded-2xl warm-hairline deep-soft-shadow p-6 flex flex-col justify-center"
+        aria-hidden="true"
+      >
+        <p class="font-body-lg text-on-surface-variant leading-relaxed">
+          ...and one quiet window<br>over all of it.
+        </p>
+      </li>
+
+    </ul>
+  </div>
+</section>
+
+<!-- ===== SECTION: conflict-deepdive ===== -->
+<section aria-labelledby="conflict-heading" class="py-24">
+  <div class="max-w-container-max mx-auto px-margin">
+    <div class="flex flex-col gap-12 lg:grid lg:grid-cols-2 lg:gap-gutter lg:items-center">
+
+      <!-- Left: copy -->
+      <div class="flex flex-col gap-6">
+        <p class="font-label-sm uppercase tracking-wider text-on-surface-variant">The thing ls can't do</p>
+
+        <h2 id="conflict-heading" class="font-headline-lg text-on-background">
+          Find the skills that are secretly fighting.
+        </h2>
+
+        <p class="font-body-lg text-on-surface-variant">
+          agentOS reads each resource's description on-device and surfaces the pairs that compete for the same prompts, so you finally know why a skill isn't firing.
+        </p>
+
+        <ul class="flex flex-col gap-3 mt-2" role="list">
+          <li class="flex items-start gap-3">
+            <span
+              class="material-symbols-outlined text-secondary shrink-0 mt-0.5"
+              style="font-size:1.125rem;font-variation-settings:'wght' 300"
+              aria-hidden="true"
+            >check_circle</span>
+            <span class="font-body-md text-on-surface-variant">Runs entirely on your machine</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <span
+              class="material-symbols-outlined text-secondary shrink-0 mt-0.5"
+              style="font-size:1.125rem;font-variation-settings:'wght' 300"
+              aria-hidden="true"
+            >check_circle</span>
+            <span class="font-body-md text-on-surface-variant">You decide what to merge, sharpen, or retire</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <span
+              class="material-symbols-outlined text-secondary shrink-0 mt-0.5"
+              style="font-size:1.125rem;font-variation-settings:'wght' 300"
+              aria-hidden="true"
+            >check_circle</span>
+            <span class="font-body-md text-on-surface-variant">Shows a real past prompt that would trigger both</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Right: conflict visualization panel -->
+      <div
+        class="bg-surface-container-lowest/60 backdrop-blur-xl rounded-2xl p-6 flex flex-col gap-5 warm-hairline deep-soft-shadow"
+        role="img"
+        aria-label="Conflict visualization: receipt-ocr and invoice-reader compete for the same prompts"
+      >
+
+        <!-- Two resource rows + connector (presentational, described by role=img aria-label above) -->
+        <div class="relative flex flex-col gap-0">
+
+          <!-- Resource A -->
+          <div class="flex items-center justify-between rounded-xl px-4 py-3 bg-surface warm-hairline">
+            <div class="flex items-center gap-2.5">
+              <span
+                class="material-symbols-outlined text-on-surface-variant"
+                style="font-size:1rem;font-variation-settings:'wght' 300"
+              >bolt</span>
+              <span class="font-code-md text-on-background">receipt-ocr</span>
+            </div>
+            <span class="font-label-sm uppercase tracking-wider text-on-surface-variant">skill</span>
+          </div>
+
+          <!-- Connector column: line + conflict node + line -->
+          <div class="flex flex-col items-center py-0 relative z-10">
+            <!-- top line -->
+            <div class="w-px h-4 bg-secondary opacity-40"></div>
+
+            <!-- conflict node -->
+            <div class="flex items-center gap-2 px-3 py-1 rounded-full bg-secondary/10 warm-hairline my-0.5">
+              <span
+                class="material-symbols-outlined text-secondary"
+                style="font-size:0.875rem;font-variation-settings:'wght' 400"
+              >compare_arrows</span>
+              <span class="font-label-sm uppercase tracking-wider text-secondary">Conflict</span>
+            </div>
+
+            <!-- bottom line -->
+            <div class="w-px h-4 bg-secondary opacity-40"></div>
+          </div>
+
+          <!-- Resource B -->
+          <div class="flex items-center justify-between rounded-xl px-4 py-3 bg-surface warm-hairline">
+            <div class="flex items-center gap-2.5">
+              <span
+                class="material-symbols-outlined text-on-surface-variant"
+                style="font-size:1rem;font-variation-settings:'wght' 300"
+              >bolt</span>
+              <span class="font-code-md text-on-background">invoice-reader</span>
+            </div>
+            <span class="font-label-sm uppercase tracking-wider text-on-surface-variant">skill</span>
+          </div>
+        </div>
+
+        <!-- Similarity signal -->
+        <div class="flex flex-col gap-2">
+          <div class="flex items-center justify-between">
+            <span class="font-label-sm uppercase tracking-wider text-on-surface-variant">Similarity</span>
+            <span class="font-label-sm uppercase tracking-wider text-secondary">High overlap</span>
+          </div>
+          <div class="h-1.5 rounded-full bg-secondary/10 overflow-hidden" aria-hidden="true">
+            <div
+              class="h-full rounded-full bg-secondary"
+              style="width:82%;transition:width 0.5s ease-out"
+            ></div>
+          </div>
+        </div>
+
+        <!-- Prompt evidence chip -->
+        <div class="flex flex-col gap-2">
+          <div class="flex items-center gap-1.5">
+            <span
+              class="material-symbols-outlined text-on-surface-variant"
+              style="font-size:0.875rem;font-variation-settings:'wght' 300"
+            >history</span>
+            <span class="font-label-sm uppercase tracking-wider text-on-surface-variant">Prompt evidence</span>
+          </div>
+
+          <div class="rounded-xl px-4 py-3 bg-surface warm-hairline">
+            <p class="font-code-md text-on-background truncate">
+              "extract the total from this receipt..."
+            </p>
+            <p class="font-label-sm text-on-surface-variant mt-1">
+              would trigger both, from your local history
+            </p>
+          </div>
+        </div>
+
+        <!-- Human-in-the-loop reassurance -->
+        <p class="font-body-md text-on-surface-variant text-center border-t border-[rgba(28,26,23,0.08)] pt-4">
+          agentOS surfaces candidates. You decide what happens next.
+        </p>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SECTION: privacy ===== -->
+<section aria-labelledby="privacy-heading" class="py-24">
+  <div class="max-w-container-max mx-auto px-margin">
+
+    <!-- Eyebrow + heading -->
+    <div class="text-center mb-14">
+      <p class="font-label-sm uppercase tracking-wider text-on-surface-variant mb-3">Local-First, By Default</p>
+      <h2 id="privacy-heading" class="font-display-lg text-on-background mb-4">
+        Nothing leaves your machine. Unless you ask.
+      </h2>
+      <p class="font-body-lg text-on-surface-variant max-w-2xl mx-auto">
+        Reading and analysis happen on your device. Two clearly-labeled actions are the only way data ever goes off-device, and only to a destination you configure.
+      </p>
+    </div>
+
+    <!-- Two-panel grid -->
+    <div class="grid lg:grid-cols-2 gap-gutter mb-10">
+
+      <!-- LEFT: Stays on device -->
+      <div class="bg-surface-container-lowest/60 backdrop-blur-xl rounded-2xl warm-hairline deep-soft-shadow p-8">
+        <h3 class="font-headline-md text-on-background mb-6">Stays on your device</h3>
+        <ul class="space-y-5" role="list">
+          <li class="flex items-start gap-3">
+            <span
+              class="material-symbols-outlined text-[#0f7a45] shrink-0 mt-0.5"
+              style="font-variation-settings:'wght' 300;font-size:20px"
+              aria-hidden="true"
+            >check_circle</span>
+            <span class="font-body-lg text-on-background">Your config is read locally</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <span
+              class="material-symbols-outlined text-[#0f7a45] shrink-0 mt-0.5"
+              style="font-variation-settings:'wght' 300;font-size:20px"
+              aria-hidden="true"
+            >check_circle</span>
+            <span class="font-body-lg text-on-background">Embeddings run on-device (WebAssembly)</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <span
+              class="material-symbols-outlined text-[#0f7a45] shrink-0 mt-0.5"
+              style="font-variation-settings:'wght' 300;font-size:20px"
+              aria-hidden="true"
+            >check_circle</span>
+            <span class="font-body-lg text-on-background">Secret-looking files (.env, keys) are refused by default</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <span
+              class="material-symbols-outlined text-[#0f7a45] shrink-0 mt-0.5"
+              style="font-variation-settings:'wght' 300;font-size:20px"
+              aria-hidden="true"
+            >check_circle</span>
+            <span class="font-body-lg text-on-background">API keys encrypted in the OS keychain</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- RIGHT: Opt-in only -->
+      <div class="bg-surface-container-lowest/60 backdrop-blur-xl rounded-2xl warm-hairline deep-soft-shadow p-8">
+        <h3 class="font-headline-md text-on-background mb-6">Opt-in, off by default</h3>
+        <ol class="space-y-6">
+          <li class="flex items-start gap-4">
+            <span class="font-label-sm text-on-surface-variant shrink-0 mt-0.5 w-5 text-right select-none" aria-hidden="true">1.</span>
+            <div class="space-y-2">
+              <div>
+                <span
+                  class="inline-flex items-center gap-1.5 bg-[#f5a524]/15 text-[#9a5b08] font-label-sm rounded-full px-2.5 py-0.5 mb-2"
+                >
+                  <span
+                    class="material-symbols-outlined"
+                    style="font-variation-settings:'wght' 300;font-size:14px"
+                    aria-hidden="true"
+                  >toggle_off</span>
+                  Off by default
+                </span>
+              </div>
+              <p class="font-body-lg text-on-background">
+                <strong class="font-headline-md text-on-background">Optimizer</strong> sends one chosen resource to an endpoint you configure, returned as a reviewable diff
+              </p>
+            </div>
+          </li>
+          <li class="flex items-start gap-4">
+            <span class="font-label-sm text-on-surface-variant shrink-0 mt-0.5 w-5 text-right select-none" aria-hidden="true">2.</span>
+            <div class="space-y-2">
+              <div>
+                <span
+                  class="inline-flex items-center gap-1.5 bg-[#f5a524]/15 text-[#9a5b08] font-label-sm rounded-full px-2.5 py-0.5 mb-2"
+                >
+                  <span
+                    class="material-symbols-outlined"
+                    style="font-variation-settings:'wght' 300;font-size:14px"
+                    aria-hidden="true"
+                  >toggle_off</span>
+                  Off by default
+                </span>
+              </div>
+              <p class="font-body-lg text-on-background">
+                <strong class="font-headline-md text-on-background">Skill sync (--push)</strong> copies selected skills to your own Git remote, and asks first
+              </p>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </div>
+
+    <!-- Closing line -->
+    <p class="text-center font-code-md text-on-surface-variant">
+      agentOS itself never receives your content.
+    </p>
+
+  </div>
+</section>
+
+<!-- ===== SECTION: founder-footer ===== -->
+<section aria-labelledby="closing-heading" class="py-24">
+  <div class="max-w-container-max mx-auto px-margin flex flex-col items-center gap-20">
+
+    <!-- Founder note -->
+    <div class="max-w-3xl mx-auto w-full">
+      <article
+        class="rounded-2xl p-10 md:p-14 bg-surface-container-lowest/60 backdrop-blur-xl warm-hairline deep-soft-shadow"
+        aria-label="Note from the maker"
+      >
+        <!-- Violet monogram -->
+        <div class="flex items-start gap-5 mb-8">
+          <div
+            class="shrink-0 w-10 h-10 rounded-lg flex items-center justify-center bg-secondary"
+            aria-hidden="true"
+          >
+            <span class="font-code-md text-white text-sm font-semibold select-none" style="font-size: 0.8rem; line-height: 1; letter-spacing: -0.01em;">ao</span>
+          </div>
+          <p class="font-label-sm uppercase tracking-wider text-on-surface-variant mt-2.5">A note from the maker</p>
+        </div>
+
+        <blockquote class="m-0 p-0 border-0">
+          <p class="font-body-lg text-xl md:text-2xl leading-relaxed text-on-background" style="letter-spacing: -0.015em;">I built agentOS because my own <code class="font-code-md text-on-surface-variant rounded" style="font-size: 0.9em; background: rgba(244,241,236,0.85); padding: 0.1em 0.35em; border-radius: 0.3em;">~/.claude</code> outgrew the terminal. I had forty skills and no idea which were fighting each other. So I made the tool I wanted: one quiet window that reads it all, shows me what conflicts, and never sends my config anywhere I didn't choose.</p>
+          <footer class="mt-8 flex items-center gap-3">
+            <div
+              class="h-px flex-1"
+              style="background: rgba(28,26,23,0.08);"
+              aria-hidden="true"
+            ></div>
+            <cite class="not-italic font-label-sm text-on-surface-variant">the maker of agentOS</cite>
+          </footer>
+        </blockquote>
+      </article>
+    </div>
+
+    <!-- Final CTA -->
+    <div class="flex flex-col items-center gap-6 text-center">
+      <h2
+        id="closing-heading"
+        class="font-headline-lg text-4xl md:text-5xl text-on-background"
+        style="letter-spacing: -0.025em;"
+      >Get clarity over your config.</h2>
+
+      <a
+        href="#download"
+        class="inline-flex items-center gap-3 rounded-xl px-8 font-headline-md text-white bg-secondary transition-all duration-200 ease-out hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-secondary"
+        style="height: 3.5rem; font-size: 1rem; letter-spacing: -0.01em; text-decoration: none; box-shadow: 0 1px 2px rgba(82,63,222,0.15), 0 8px 24px -4px rgba(82,63,222,0.35);"
+      >
+        <span
+          class="material-symbols-outlined"
+          aria-hidden="true"
+          style="font-size: 1.2rem; font-variation-settings: 'wght' 300;"
+        >download</span>
+        Download for macOS
+      </a>
+
+      <p class="font-body-md text-on-surface-variant">Free. No account. macOS. Open the app and it just reads your <code class="font-code-md text-on-surface-variant">~/.claude</code>.</p>
+    </div>
+
+  </div>
+</section>
+
+<footer
+  role="contentinfo"
+  style="border-top: 1px solid rgba(28,26,23,0.08);"
+>
+  <div class="max-w-container-max mx-auto px-margin py-16">
+    <div class="grid grid-cols-1 md:grid-cols-[1fr_auto_auto_auto] gap-12 md:gap-16">
+
+      <!-- Wordmark + tagline -->
+      <div class="flex flex-col gap-4">
+        <div class="flex items-center gap-2.5">
+          <div
+            class="w-7 h-7 rounded-md flex items-center justify-center shrink-0 bg-secondary"
+            aria-hidden="true"
+          >
+            <span
+              class="material-symbols-outlined text-white"
+              style="font-size: 0.95rem; font-variation-settings: 'wght' 300;"
+            >terminal</span>
+          </div>
+          <span class="font-headline-md text-base text-on-background" style="letter-spacing: -0.02em;">agentOS</span>
+        </div>
+        <p class="font-body-md text-sm leading-relaxed max-w-xs text-on-surface-variant">One control panel for your AI-assistant configuration. Local-first.</p>
+        <p class="font-code-md text-xs mt-2 text-on-surface-variant" style="letter-spacing: 0.01em;">v0.1 &middot; macOS &middot; made for people whose dotfiles got out of hand.</p>
+      </div>
+
+      <!-- Product links -->
+      <nav aria-labelledby="footer-product-heading">
+        <p
+          id="footer-product-heading"
+          class="font-label-sm text-xs font-semibold uppercase tracking-widest mb-4 text-on-surface-variant"
+        >Product</p>
+        <ul class="flex flex-col gap-3 list-none m-0 p-0" role="list">
+          <li>
+            <a
+              href="#features"
+              class="font-body-md text-sm text-on-surface-variant transition-colors duration-150 ease-out hover:text-secondary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-secondary rounded"
+              style="text-decoration: none;"
+            >Features</a>
+          </li>
+          <li>
+            <a
+              href="#conflict-detection"
+              class="font-body-md text-sm text-on-surface-variant transition-colors duration-150 ease-out hover:text-secondary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-secondary rounded"
+              style="text-decoration: none;"
+            >Conflict detection</a>
+          </li>
+          <li>
+            <a
+              href="#privacy"
+              class="font-body-md text-sm text-on-surface-variant transition-colors duration-150 ease-out hover:text-secondary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-secondary rounded"
+              style="text-decoration: none;"
+            >Privacy</a>
+          </li>
+        </ul>
+      </nav>
+
+      <!-- Resources links -->
+      <nav aria-labelledby="footer-resources-heading">
+        <p
+          id="footer-resources-heading"
+          class="font-label-sm text-xs font-semibold uppercase tracking-widest mb-4 text-on-surface-variant"
+        >Resources</p>
+        <ul class="flex flex-col gap-3 list-none m-0 p-0" role="list">
+          <li>
+            <a
+              href="#docs"
+              class="font-body-md text-sm text-on-surface-variant transition-colors duration-150 ease-out hover:text-secondary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-secondary rounded"
+              style="text-decoration: none;"
+            >Docs</a>
+          </li>
+          <li>
+            <a
+              href="#cli"
+              class="font-body-md text-sm text-on-surface-variant transition-colors duration-150 ease-out hover:text-secondary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-secondary rounded"
+              style="text-decoration: none;"
+            >CLI</a>
+          </li>
+          <li>
+            <a
+              href="#changelog"
+              class="font-body-md text-sm text-on-surface-variant transition-colors duration-150 ease-out hover:text-secondary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-secondary rounded"
+              style="text-decoration: none;"
+            >Changelog</a>
+          </li>
+        </ul>
+      </nav>
+
+      <!-- Legal links -->
+      <nav aria-labelledby="footer-legal-heading">
+        <p
+          id="footer-legal-heading"
+          class="font-label-sm text-xs font-semibold uppercase tracking-widest mb-4 text-on-surface-variant"
+        >Legal</p>
+        <ul class="flex flex-col gap-3 list-none m-0 p-0" role="list">
+          <li>
+            <a
+              href="#privacy-policy"
+              class="font-body-md text-sm text-on-surface-variant transition-colors duration-150 ease-out hover:text-secondary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-secondary rounded"
+              style="text-decoration: none;"
+            >Privacy</a>
+          </li>
+          <li>
+            <a
+              href="#terms"
+              class="font-body-md text-sm text-on-surface-variant transition-colors duration-150 ease-out hover:text-secondary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-secondary rounded"
+              style="text-decoration: none;"
+            >Terms</a>
+          </li>
+        </ul>
+      </nav>
+
+    </div>
+  </div>
+</footer>
+
+</body></html>
