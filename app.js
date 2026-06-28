@@ -1,18 +1,14 @@
-/* agentOS marketing — gated download + mobile nav.
+/* agentOS marketing — gated download.
  *
  * SECURITY MODEL (read before changing):
  *   The ONLY real gate is the Cloudflare Worker. It holds the access-code hash
  *   and the private R2 object key as server secrets, validates the submitted
- *   code, and returns a short-lived signed URL. The binary's real URL never
- *   ships to the browser.
+ *   code, and 302-redirects to a short-lived signed URL. The binary's real URL
+ *   never ships to the browser.
  *
  *   The client-side SHA-256 check below is a LOCAL-DEMO FALLBACK only. It is
  *   trivially bypassable (the hash is in this file) and must never be the sole
  *   gate in production. Set WORKER_URL and it takes over.
- *
- *   Worker source lives in the app repo at marketing/worker/. To go live:
- *   deploy it, upload the macOS build to its private R2 bucket, then set
- *   WORKER_URL below to "https://<worker>/download".
  */
 
 // Point this at the deployed Worker (e.g. "https://dl.agentos.app/download").
@@ -23,7 +19,7 @@ const WORKER_URL = "";
 const DEMO_CODE_HASH = "244c5ae872ff327c7b1aeea6d4deaa8d7318bafc5c5c46fe43e96f7efc9f41b4";
 
 // Where the demo points when unlocked locally (no Worker). Replace per environment.
-const DEMO_DOWNLOAD_URL = "https://github.com/sickle5stone/agentos-site";
+const DEMO_DOWNLOAD_URL = "https://github.com/your-org/agentos/releases/latest";
 
 const gate = document.getElementById("gate");
 const form = document.getElementById("gate-form");
@@ -34,7 +30,7 @@ let lastFocused = null;
 function openGate() {
   lastFocused = document.activeElement;
   gate.hidden = false;
-  gate.classList.add("flex");
+  gate.classList.add("open");
   err.textContent = "";
   input.value = "";
   // focus after paint so the transition doesn't eat it
@@ -43,8 +39,8 @@ function openGate() {
 }
 
 function closeGate() {
+  gate.classList.remove("open");
   gate.hidden = true;
-  gate.classList.remove("flex");
   document.removeEventListener("keydown", onKey);
   if (lastFocused && lastFocused.focus) lastFocused.focus();
 }
@@ -117,7 +113,6 @@ gate.addEventListener("click", (e) => {
 document.querySelectorAll("[data-download]").forEach((el) =>
   el.addEventListener("click", (e) => {
     e.preventDefault();
-    closeMobileMenu();
     openGate();
   })
 );
@@ -127,25 +122,3 @@ if (location.hash === "#download") openGate();
 window.addEventListener("hashchange", () => {
   if (location.hash === "#download") openGate();
 });
-
-/* ── Mobile nav ──────────────────────────────────────────── */
-const menuToggle = document.getElementById("menu-toggle");
-const mobileMenu = document.getElementById("mobile-menu");
-
-function closeMobileMenu() {
-  if (!mobileMenu) return;
-  mobileMenu.hidden = true;
-  if (menuToggle) menuToggle.setAttribute("aria-expanded", "false");
-}
-
-if (menuToggle && mobileMenu) {
-  menuToggle.addEventListener("click", () => {
-    const open = mobileMenu.hidden;
-    mobileMenu.hidden = !open;
-    menuToggle.setAttribute("aria-expanded", String(open));
-  });
-  // Tapping any in-menu link (anchors) collapses the menu.
-  mobileMenu.querySelectorAll("a").forEach((a) =>
-    a.addEventListener("click", () => closeMobileMenu())
-  );
-}

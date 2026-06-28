@@ -1,0 +1,66 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── Project custom utilities (formerly inline <style> on every page) ───── */
+.warm-hairline {
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+.deep-soft-shadow {
+  box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.06), 0 18px 36px -18px rgba(0, 0, 0, 0.04);
+}
+
+/* ── Legal pages (privacy.html, terms.html) prose ──────────────────────── */
+.prose-doc h2 {
+  margin-top: 2.5rem;
+  margin-bottom: 0.75rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(28, 26, 23, 0.08);
+}
+.prose-doc h3 {
+  margin-top: 1.75rem;
+  margin-bottom: 0.5rem;
+}
+.prose-doc p {
+  margin-bottom: 1rem;
+}
+.prose-doc ul {
+  margin: 0 0 1.25rem 0;
+  padding-left: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+.prose-doc li {
+  padding-left: 1.25rem;
+  position: relative;
+}
+.prose-doc li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.65em;
+  width: 5px;
+  height: 5px;
+  border-radius: 9999px;
+  background: #523fde;
+  opacity: 0.55;
+}
+.prose-doc code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.88em;
+  background: rgba(244, 241, 236, 0.85);
+  padding: 0.1em 0.35em;
+  border-radius: 0.3em;
+}
+.prose-doc a {
+  color: #523fde;
+  text-decoration: none;
+}
+.prose-doc a:hover {
+  text-decoration: underline;
+}
+.prose-doc strong {
+  font-weight: 600;
+}
